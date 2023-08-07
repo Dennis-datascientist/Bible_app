@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 # Load data
-data = pd.read_csv('/home/dennoh/Documents/Bible/bible_data_set_with_topics.csv')
+data = pd.read_csv('bible_data_set_with_topics.csv')
 
 # Define the mapping of topic numbers to names
 topic_mapping = {
