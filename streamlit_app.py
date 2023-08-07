@@ -58,7 +58,7 @@ st.title("Bible Study App")
 
 # Create columns for layout
 st.sidebar.header('Search Options')
-user_choice = st.sidebar.radio('Choose an option:', ('Search Keyword/Theme', 'Get Book', 'Search by Topic'))
+user_choice = st.sidebar.radio('Choose an option:', ('Search Keyword/Theme', 'Get Chapter', 'Search by Topic'))
  
 # Display daily devotional
 citation, text = get_daily_devotional(data)
