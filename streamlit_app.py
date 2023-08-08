@@ -1,13 +1,12 @@
 
 import pandas as pd
-import pandas as pd
 import streamlit as st
 import datetime
 import random
 import openai
 import os
 
-openai.api_key = os.getenv('OPENAI_KEY')
+openai.api_key = st.secrets["general"]["OPENAI_KEY"]
 
 
 # Load data
