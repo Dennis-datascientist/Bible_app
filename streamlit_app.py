@@ -9,7 +9,7 @@ import datetime
 import random
 
 # Load data
-data = pd.read_excel("ylt.xlsx")
+data = pd.read_csv('bible_data_set_with_topics.csv')
 
 
 # Define the mapping of topic numbers to names
