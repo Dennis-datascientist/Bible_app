@@ -1,3 +1,8 @@
+import pip
+pip.main(['install','openpyxl']) 
+
+import pandas as pd
+# rest of code
 import pandas as pd
 import streamlit as st
 import datetime
