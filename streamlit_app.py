@@ -78,7 +78,7 @@ if user_choice == 'Search Keyword/Theme':
             st.write('No verses found containing the given word.')
 
 elif user_choice == 'Get Chapter':
-    book_input = st.text_input('Enter the name of the book:')
+    book_input = st.text_input('Enter the name of the Chapter:')
     if book_input:
         verses = get_book(book_input)
         if not verses.empty:
