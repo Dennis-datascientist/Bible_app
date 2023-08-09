@@ -77,7 +77,6 @@ def get_daily_devotional(data):
     return citation, text
 
 # Set the title
-st.title("Bible Study App with AI Assistant")
 with elements("welcome_msg"):
     mui.Typography("Welcome to the Bible Study App with AI Assistance", variant="h4", color="primary")
 
@@ -157,9 +156,13 @@ with st.spinner('Generating AI response...'):
 with elements("feedback_section"):
     mui.Typography("Was the AI's response helpful?", variant="body1")
     feedback_options = ['Very Useful', 'Somewhat Useful', 'Not Useful']
+
+    # Create a radio group with default value 'Very Useful'
     feedback = mui.RadioGroup(value='Very Useful', row=True)
+    
     for option in feedback_options:
         feedback.Radio(value=option, label=option)
+
 
 
 if __name__ == "__main__":
