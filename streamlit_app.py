@@ -75,7 +75,7 @@ def get_daily_devotional(data):
     return citation, text
 
 # Set the title
-st.title("Bible Study App")
+st.title("Bible Study App with AI Assistant")
 
 # Create columns for layout
 st.sidebar.header('Search Options')
@@ -130,18 +130,28 @@ You can ask the model questions about a particular verse, topic, or general Bibl
 """
 )
 
-user_question = st.text_input('Now, enter your question:')
-regenerate_button = st.button('Generate Response')
 
-if regenerate_button and user_question:
-    response_a = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=user_question,
-        temperature=0.5,
-        max_tokens=2000
-    )
-    st.write(response_a.choices[0].text.strip())
 
+# Input + Button
+user_question = st.text_input('Enter your question:')
+regenerate_button = st.button('Generate Response', icon="search")
+
+# Loading animation while generating response
+with st.spinner('Generating AI response...'):
+    if regenerate_button and user_question:
+        response_a = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=user_question,
+            temperature=0.5,
+            max_tokens=2000
+        )
+        st.write(response_a.choices[0].text.strip())
+
+# Feedback
+feedback_options = ['Very Useful', 'Somewhat Useful', 'Not Useful']
+selected_feedback = st.radio("Was the AI's response helpful?", feedback_options)
+if selected_feedback:
+    st.markdown(f"Thank you for the feedback! You found the response **{selected_feedback}**.")
 
 if __name__ == "__main__":
 
