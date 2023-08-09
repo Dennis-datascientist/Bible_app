@@ -78,7 +78,7 @@ def get_daily_devotional(data):
 
 # Set the title
 with elements("welcome_msg"):
-    mui.Typography("Welcome to the Bible Study App with AI Assistance", variant="h4", color="primary")
+    mui.Typography("Welcome to the Bible Study App with AI Assistance", variant="h4")
 
 
 # Create columns for layout
@@ -91,7 +91,7 @@ user_choice = st.sidebar.radio('Choose an option:',
 # Display daily devotional
 citation, text = get_daily_devotional(data)
 with elements("daily_devotion_header"):
-    mui.Typography("Daily Devotional", variant="h5", color="secondary")
+    mui.Typography("Daily Devotional", variant="h5")
 st.markdown(f"**Today's Verse ({citation}):** {text}")
 
 
@@ -153,16 +153,11 @@ with st.spinner('Generating AI response...'):
         st.write(response_a.choices[0].text.strip())
 
 # Feedback
-with elements("feedback_section"):
-    mui.Typography("Was the AI's response helpful?", variant="body1")
-    feedback_options = ['Very Useful', 'Somewhat Useful', 'Not Useful']
-
-    # Create a radio group with default value 'Very Useful'
-    feedback = mui.RadioGroup(value='Very Useful', row=True)
-    
-    for option in feedback_options:
-        feedback.Radio(value=option, label=option)
-
+# Feedback
+feedback_options = ['Very Useful', 'Somewhat Useful', 'Not Useful']
+selected_feedback = st.radio("Was the AI's response helpful?", feedback_options)
+if selected_feedback:
+    st.markdown(f"Thank you for the feedback! You found the response **{selected_feedback}**.")
 
 
 if __name__ == "__main__":
