@@ -153,16 +153,14 @@ with st.spinner('Generating AI response...'):
         st.write(response_a.choices[0].text.strip())
 
 # Feedback
-# Feedback
 feedback_options = ['Very Useful', 'Somewhat Useful', 'Not Useful']
 selected_feedback = st.radio("Was the AI's response helpful?", feedback_options)
 if selected_feedback:
-    st.markdown(f"Thank you for the feedback! You found the response **{selected_feedback}**.")
+    st.markdown(f"Thank you for the feedback!")
 
 
 if __name__ == "__main__":
 
-    st.sidebar.header('Bible Study')
     st.sidebar.markdown(
 """
 ## Capabilities and Limitations
