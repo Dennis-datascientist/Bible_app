@@ -130,8 +130,8 @@ You can ask the model questions about a particular verse, topic, or general Bibl
 """
 )
 
-user_question = st.text_input('Now, enter your question and Tap the Textbox')
-    regenerate_button = st.button('Generate Response')
+user_question = st.text_input('Now, enter your question:')
+regenerate_button = st.button('Generate Response')
 
 if regenerate_button and user_question:
     response_a = openai.Completion.create(
@@ -141,6 +141,7 @@ if regenerate_button and user_question:
         max_tokens=2000
     )
     st.write(response_a.choices[0].text.strip())
+
 
 if __name__ == "__main__":
 
