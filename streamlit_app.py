@@ -134,7 +134,7 @@ You can ask the model questions about a particular verse, topic, or general Bibl
 
 # Input + Button
 user_question = st.text_input('Enter your question:')
-regenerate_button = st.button('Generate Response', icon="search")
+regenerate_button = st.button('Generate Response')
 
 # Loading animation while generating response
 with st.spinner('Generating AI response...'):
@@ -155,7 +155,7 @@ if selected_feedback:
 
 if __name__ == "__main__":
 
-    st.sidebar.header('Bible Study App')
+    st.sidebar.header('Bible Study')
     st.sidebar.markdown(
 """
 ## Capabilities and Limitations
