@@ -5,6 +5,8 @@ import datetime
 import random
 import openai
 import os
+from streamlit_elements import elements, mui, html
+
 
 openai.api_key = st.secrets["general"]["OPENAI_KEY"]
 
@@ -76,6 +78,9 @@ def get_daily_devotional(data):
 
 # Set the title
 st.title("Bible Study App with AI Assistant")
+with elements("welcome_msg"):
+    mui.Typography("Welcome to the Bible Study App with AI Assistance", variant="h4", color="primary")
+
 
 # Create columns for layout
 st.sidebar.header('Search Options')
@@ -86,7 +91,8 @@ user_choice = st.sidebar.radio('Choose an option:',
 
 # Display daily devotional
 citation, text = get_daily_devotional(data)
-st.header('Daily Devotional')
+with elements("daily_devotion_header"):
+    mui.Typography("Daily Devotional", variant="h5", color="secondary")
 st.markdown(f"**Today's Verse ({citation}):** {text}")
 
 
@@ -148,10 +154,13 @@ with st.spinner('Generating AI response...'):
         st.write(response_a.choices[0].text.strip())
 
 # Feedback
-feedback_options = ['Very Useful', 'Somehow Useful', 'Not Useful']
-selected_feedback = st.radio("Was the AI's response helpful?", feedback_options)
-if selected_feedback:
-    st.markdown(f"Thank you for the feedback! You found the response **{selected_feedback}**.")
+with elements("feedback_section"):
+    mui.Typography("Was the AI's response helpful?", variant="body1")
+    feedback_options = ['Very Useful', 'Somewhat Useful', 'Not Useful']
+    feedback = mui.RadioGroup(value='Very Useful', row=True)
+    for option in feedback_options:
+        feedback.Radio(value=option, label=option)
+
 
 if __name__ == "__main__":
 
