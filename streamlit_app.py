@@ -97,14 +97,23 @@ st.markdown(f"**Today's Verse ({citation}):** {text}")
 
 
 if user_choice == 'Get Chapter':
+    # Input + Button
     book_input = st.text_input('Enter the name of the Chapter:')
-    if book_input:
-        verses = get_book(book_input)
-        if not verses.empty:
-            for index, row in verses.iterrows():
-                st.write(f"{row['book']} {row['chapter']}:{row['verse']} , {row['text']}")
-        else:
-            st.write('No verses found from the given book.')
+    search_button = st.button('Search Chapter')
+
+    if search_button:
+        # Loading animation while generating response
+        with st.spinner('Searching...'):
+            if book_input:
+                verses = get_book(book_input)
+                if not verses.empty:
+                    for index, row in verses.iterrows():
+                        st.write(f"{row['book']} {row['chapter']}:{row['verse']} , {row['text']}")
+                else:
+                    st.write('No verses found from the given book.')
+            else:
+                st.warning("Please enter a chapter name before searching.")
+
 
 elif user_choice == 'Search by Topic':
     topic_input = st.selectbox('Choose a topic:', list(topic_mapping.values()), key='topic_input')
