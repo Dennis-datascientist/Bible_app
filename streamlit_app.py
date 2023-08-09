@@ -114,10 +114,13 @@ elif user_choice == 'Search by Topic':
 
 elif user_choice == 'Model Guide':
     verse_input = st.text_input('Enter the verse you would like to summarize:')
-    if verse_input:
+    search_button = st.button('Generate Summary')
+    
+    if search_button and verse_input:
         summary = summarize_verse(verse_input)
         st.write("Model Guide:")
-        st.write(summary) 
+        st.write(summary)
+
 st.markdown(
 """
 ## Ask the Model
@@ -128,7 +131,9 @@ You can ask the model questions about a particular verse, topic, or general Bibl
 )
 
 user_question = st.text_input('Now, enter your question and Tap the Textbox')
-if user_question:
+    regenerate_button = st.button('Generate Response')
+
+if regenerate_button and user_question:
     response_a = openai.Completion.create(
         engine="text-davinci-003",
         prompt=user_question,
