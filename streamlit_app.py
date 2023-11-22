@@ -12,7 +12,7 @@ openai.api_key = st.secrets["general"]["OPENAI_KEY"]
 
 
 # Load data
-#data = pd.read_csv('bible_data_set_with_topics.csv')
+data = pd.read_csv('bible_data_set_with_topics.csv')
 
 
 # Define the mapping of topic numbers to names
