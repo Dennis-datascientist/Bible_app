@@ -3,12 +3,13 @@ import pandas as pd
 import streamlit as st
 import datetime
 import random
-import openai
+import pprint
+import google.generativeai as palm
 import os
 from streamlit_elements import elements, mui, html
 
 
-openai.api_key = st.secrets["general"]["OPENAI_KEY"]
+palm.configure = st.secrets["general"]["OPENAI_KEY"]
 
 
 # Load data
