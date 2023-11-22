@@ -12,35 +12,40 @@ openai.api_key = st.secrets["general"]["OPENAI_KEY"]
 
 
 # Load data
-data = pd.read_csv('bible_data_set_with_topics.csv')
+#data = pd.read_csv('bible_data_set_with_topics.csv')
 
 
 # Define the mapping of topic numbers to names
-topic_mapping = {
-    0: 'Heavenly Knowledge',
-    1: 'Faith and Belief',
-    2: 'Physical and Spiritual Existence',
-    3: 'Love and Relationships',
-    4: 'Great Deeds and Sacrifices',
-    5: 'Life and Death',
-    6: 'Holiness and Sin',
-    7: 'Coming of Life',
-    8: 'Work of Christ',
-    9: 'Laws and Kingdom',
-}
+#topic_mapping = {
+    #0: 'Heavenly Knowledge',
+    #1: 'Faith and Belief',
+    #2: 'Physical and Spiritual Existence',
+    #3: 'Love and Relationships',
+    #4: 'Great Deeds and Sacrifices',
+    #5: 'Life and Death',
+    #6: 'Holiness and Sin',
+    #7: 'Coming of Life',
+    #8: 'Work of Christ',
+    #9: 'Laws and Kingdom',
+#}
 
 # Define functions
-def summarize_verse(verse_text):
+def generate_summary(verse):
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=f"Summarize this excerpt: {verse_text}",
-        temperature=0.7,
-        max_tokens=1000,
+        prompt=f"Summarize this bible verse: {verse}",
+        temperature=0.5,
+        max_tokens=64,
         top_p=1.0,
-        frequency_penalty=0.0,
+        frequency_penalty=0.0, 
         presence_penalty=0.0
     )
     return response["choices"][0]["text"]
+
+verse_input = st.text_input("Enter verse:")
+if st.button("Summarize"):
+    summary = generate_summary(verse_input)
+    st.write(summary)
 # Define functions
 def generate_follow_up(verse, user_response):
     if len(user_response) < 120:
