@@ -10,24 +10,47 @@ from streamlit_elements import elements, mui, html
 
 openai.api_key = st.secrets["general"]["OPENAI_KEY"]
 
+# Theming for serene and calm colors
+primaryColor = "#6c757d"
+backgroundColor = "#f8f9fa"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#000000"
+font = "sans serif"
+
+st.set_page_config(layout="wide", page_title="Bible Study App", page_icon=":book:")
+
+# Custom CSS for the theme
+st.markdown(
+    f"""
+    <style>
+        .reportview-container .main .block-container{{
+            max-width: 90%;
+            padding-top: 5rem;
+            padding-right: 5rem;
+            padding-left: 5rem;
+            padding-bottom: 5rem;
+        }}
+        .reportview-container .main {{
+            color: {textColor};
+            background-color: {backgroundColor};
+        }}
+        .sidebar .sidebar-content {{
+            background-color: {secondaryBackgroundColor};
+        }}
+        header .decoration {{
+            background-color: {primaryColor};
+        }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Sidebar for navigation
+st.sidebar.title("Navigation")
+page = st.sidebar.selectbox("Choose a page:", ["Home", "Search by Book", "Search by Topic", "Daily Devotional", "Ask the Model"])
 
 # Load data
 data = pd.read_csv('bible_data_set_with_topics.csv')
-
-
-# Define the mapping of topic numbers to names
-#topic_mapping = {
-    #0: 'Heavenly Knowledge',
-    #1: 'Faith and Belief',
-    #2: 'Physical and Spiritual Existence',
-    #3: 'Love and Relationships',
-    #4: 'Great Deeds and Sacrifices',
-    #5: 'Life and Death',
-    #6: 'Holiness and Sin',
-    #7: 'Coming of Life',
-    #8: 'Work of Christ',
-    #9: 'Laws and Kingdom',
-#}
 
 # Define functions
 def generate_summary(verse):
@@ -89,25 +112,24 @@ with elements("welcome_msg"):
 # Create columns for layout
 st.sidebar.header('Search Options')
 user_choice = st.sidebar.radio('Choose an option:', 
-                               ( 'Get Chapter', 
-                                'Search by Topic', 
-                                'Model Guide')) # added this line
-
-# Display daily devotional
-citation, text = get_daily_devotional(data)
-with elements("daily_devotion_header"):
-    mui.Typography("Daily Devotional", variant="h5")
-st.markdown(f"**Today's Verse ({citation}):** {text}")
+                               ( 'Home', 
+                                'Search by Book', 
+                                'search by Topic',
+                                'Daily Devotional',
+                                'Ask the model')) 
 
 
 
-if user_choice == 'Get Chapter':
-    # Input + Button
-    book_input = st.text_input('Enter the name of the Chapter:')
-    search_button = st.button('Search Chapter')
+# Main app layout
+if page == "Home":
+    st.title("Welcome to the Bible Study App")
+    st.markdown("Explore Bible verses, understand different topics, and engage with AI for insights.")
+    # Any additional content for the home page...
 
-    if search_button:
-        # Loading animation while generating response
+elif page == "Search by Book":
+    st.title("Search by Book")
+    book_input = st.text_input('Enter the name of the book:')
+    if st.button('Search'):
         with st.spinner('Searching...'):
             if book_input:
                 verses = get_book(book_input)
@@ -115,30 +137,51 @@ if user_choice == 'Get Chapter':
                     for index, row in verses.iterrows():
                         st.write(f"{row['book']} {row['chapter']}:{row['verse']} , {row['text']}")
                 else:
-                    st.write('No verses found from the given book.')
+                    st.write('No verses found for the given book.')
             else:
-                st.warning("Please enter a chapter name before searching.")
+                st.warning("Please enter a book name before searching.")
 
-
-elif user_choice == 'Search by Topic':
-    topic_input = st.selectbox('Choose a topic:', list(topic_mapping.values()), key='topic_input')
-
+elif page == "Search by Topic":
+    st.title("Search by Topic")
+    topic_input = st.selectbox('Choose a topic:', list(topic_mapping.values()))
     if topic_input:
-        # Here, we're getting the numerical ID of the topic that corresponds to the topic name.
         topic_id = list(topic_mapping.keys())[list(topic_mapping.values()).index(topic_input)]
         verses = get_verses_by_topic(topic_id)
         if not verses.empty:
             for index, row in verses.iterrows():
                 st.write(f"{row['book']} {row['chapter']}:{row['verse']} , {row['text']}")
 
-elif user_choice == 'Model Guide':
-    verse_input = st.text_input('Enter the verse you would like to summarize:')
-    search_button = st.button('Generate Summary')
-    
-    if search_button and verse_input:
-        summary = summarize_verse(verse_input)
-        st.write("Model Guide:")
-        st.write(summary)
+elif page == "Daily Devotional":
+    st.title("Daily Devotional")
+    citation, text = get_daily_devotional(data)
+
+    # Responsive layout with two columns
+    col1, col2 = st.beta_columns([1, 2])  
+
+    with col1:
+        st.markdown("**Today's Verse**")
+        st.markdown(f"**{citation}**")
+
+    with col2:
+        st.markdown("**Verse Explanation:**")
+        st.markdown(text)
+
+
+elif page == "Ask the Model":
+    st.title("Ask the Model")
+    st.markdown("You can ask the model questions about a particular verse, topic, or general Bible-related inquiries.")
+    user_question = st.text_input('Enter your question:')
+    if st.button('Generate Response'):
+        with st.spinner('Generating AI response...'):
+            if user_question:
+                response = openai.Completion.create(
+                    engine="text-davinci-003",
+                    prompt=user_question,
+                    temperature=0.5,
+                    max_tokens=2000
+                )
+                st.write(response.choices[0].text.strip())
+
 
 st.markdown(
 """
@@ -171,6 +214,24 @@ feedback_options = ['Very Useful', 'Somewhat Useful', 'Not Useful']
 selected_feedback = st.radio("Was the AI's response helpful?", feedback_options)
 if selected_feedback:
     st.markdown(f"Thank you for the feedback!")
+
+import matplotlib.pyplot as plt
+
+# Example function to create a simple bar chart
+def plot_theme_frequency(data):
+    theme_counts = data['theme'].value_counts()
+    plt.figure(figsize=(10,6))
+    plt.bar(theme_counts.index, theme_counts.values)
+    plt.xlabel('Themes')
+    plt.ylabel('Frequency')
+    plt.title('Frequency of Bible Themes')
+    return plt
+
+if page == "Theme Analysis":
+    st.title("Bible Theme Analysis")
+    chart = plot_theme_frequency(data)
+    st.pyplot(chart)
+
 
 
 if __name__ == "__main__":
